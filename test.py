@@ -1,23 +1,35 @@
 import PySimpleGUI as sg
-sg.theme('BluePurple')
+import random
+
+#sg.theme('BluePurple')
+
+#generate a random number 0-100
+#display that as a bar
+#user input 'guess what % of bar filled?'
+#store result
+#repeat 10? times
+
 
 layout = [
-    [sg.Text('Your typed characters appear here:'),
-     sg.Text(size=(15, 1), key='-OUTPUT-')],
+    [sg.Text('Guess the percentage the bar is filled:')],
     [sg.Input(key='-IN-')],
-    [sg.Button('Display'), sg.Button('Exit')]
+    [sg.Button('Start'), sg.Button('Exit')],
+    [sg.ProgressBar(100,key='-PROGRESS-BAR-',size=(50,50))]
 ]
 
 window = sg.Window('Introduction', layout)
+window.finalize()
 
 while True:
+    num = random.randrange(0,100,1) # generate random number 0-100 inclusive
+    window['-PROGRESS-BAR-'].update(current_count=num)
+
     event, values = window.read()
-    print(event, values)
 
     if event in (None, 'Exit'):
         break
 
-    if event == 'Display':
-        window['-OUTPUT-'].update(values['-IN-'])
+    if event == 'Start':
+        print(values['-IN-'],' ',num)
 
 window.close()
