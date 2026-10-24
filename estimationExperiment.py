@@ -2,13 +2,12 @@ import PySimpleGUI as sg
 import random
 import csv
 
-#sg.theme('BluePurple')
+#small experiment, testing user's ability to estimate the value of UI elements (percentage bar), depending on the size of the element
 
-#generate a random number 0-100
-#display that as a bar
-#user input 'guess what % of bar filled?'
-#store result
-#repeat 10? times
+#settings
+outputfile = 'data.csv'
+sets = 5 # how many different sizes of bar
+reps = 10 # how guesses per bar size
 
 layout = [
     [sg.Text('',key='-TEXT-')],
@@ -17,18 +16,13 @@ layout = [
     [sg.ProgressBar(100,key='-PROGRESS-BAR-',size=(50,50))]
 ]
 
-sets = 5 # how many different sizes of bar
-reps = 10 # how guesses per bar size
-
-data = [[[None]*2]*(reps+1)]*sets
-
-window = sg.Window('Introduction', layout)
+data = [[[None for x in range (2)] for y in range(reps+1)] for z in range(sets)]
+window = sg.Window('UI Estimation Experiment', layout)
 window.finalize()
 
 for i in range (0,sets):
-    #data[0] = [f'Bar Size {i+1}'] # add header
+    data[i][0] = [f'(Bar size {i+1}) User Guess (%)', 'Actual Value (%)'] # add header
     for j in range(1,reps+1):
-        data[0][j] = ['User Guess (%)', 'Actual Value (%)'] # add header
 
         window['-TEXT-'].update(f'Guess the percentage that the bar is filled  -  Attempt no. {j}, bar size: {i+1}')
         window['-IN-'].update(value='%',move_cursor_to=0)
@@ -41,12 +35,17 @@ for i in range (0,sets):
             break
 
         if event == 'Enter':
-            data[i][j][0]=['-IN-'][:-1]  # save user guess
-            data[i][j][1]=num            # save actual val
-
-            print(values['-IN-'][:-1],' ',num)
+            data[i][j][0]=values['-IN-'][:-1]# save user guess
+            data[i][j][1]=num                # save actual val
             window['-IN-'].update()
+            print(data[i][j][0],data[i][j][1])
 
-print(data)
+# write data to csv file
+with open(outputfile, 'w') as csvfile:
+    csvwriter = csv.writer(csvfile)        # Create writer object
+    for i in range (sets):
+        csvwriter.writerows(data[i])              # Write multiple rows
 
+print("written to",outputfile)
 window.close()
+
