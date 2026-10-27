@@ -13,8 +13,8 @@ pip install pySimpleGui
 Or for use on uni computers:
 
 ```
-python3 -m venv .venv
-source .venv/bin/activate
+python3 -m venv hci_env
+source hci_env/bin/activate
 pip install pysimplegui
 ```
 
