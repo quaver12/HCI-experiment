@@ -9,8 +9,10 @@ Requires pySimpleGui:
 ```pip install pySimpleGui```
 
 For use on uni computers:
-``` python3 -m venv .venv
+`python3 -m venv .venv
 source .venv/bin/activate
-pip install pysimplegui```
+pip install pysimplegui`
+
+then run ```python3 estimationExperiment.py```
 
 
