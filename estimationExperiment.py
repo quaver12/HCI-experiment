@@ -16,7 +16,7 @@ layout = [
     [sg.ProgressBar(100,key='-PROGRESS-BAR-',size=(30,30))]
 ]
 
-data = [[[None for x in range (2)] for y in range(reps)] for z in range(sets)]
+data = [[[None for x in range (3)] for y in range(reps)] for z in range(sets)]
 window = sg.Window('UI Estimation Experiment', layout)
 window.finalize()
 
@@ -38,21 +38,21 @@ for i in range (sets-1,-1,-1):
             break
 
         if event == 'Enter':
-            data[i][j][0]=values['-IN-'][:-1]# save user guess
-            data[i][j][1]=num                # save actual val
+
+            data[i][j][0]=f'2^{i}'
+            data[i][j][1]=values['-IN-'][:-1]# save user guess
+            data[i][j][2]=num                # save actual val
             window['-IN-'].update()
-            window['-GUESS-'].update(f"Guessed value: {data[i][j][0]}")
-            window['-VALUE-'].update(f"Real value: {data[i][j][1]}")
+            window['-GUESS-'].update(f"Guessed value: {data[i][j][1]}")
+            window['-VALUE-'].update(f"Real value: {data[i][j][2]}")
             #print(data[i][j][0],data[i][j][1])
 
 # write data to csv file
 with open(outputfile, 'w') as csvfile:
-    csvwriter = csv.writer(csvfile)        # Create writer object
-    for i in range (sets):
-
-        csvwriter.writerow([f'(Bar size 2^{i})'])
-        csvwriter.writerow(['User Guess (%)','Actual Value (%)'])
-        csvwriter.writerows(data[i])              # Write multiple rows
+    csvwriter = csv.writer(csvfile)                                                 # Create writer object
+    csvwriter.writerow(['Bar size (relative)','User Guess (%)','Actual Value (%)'])   # write header
+    for i in range (sets):                                                          # write data
+        csvwriter.writerows(data[i])
 
 print("written to",outputfile)
 window.close()
